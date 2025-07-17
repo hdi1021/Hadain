@@ -1,8 +1,8 @@
 name: GitHub-Profile-3D-Contrib
 
 on:
-  schedule: # 03:00 JST == 18:00 UTC
-    - cron: "0 18 * * *"
+  schedule:
+    - cron: "0 18 * * *" # 매일 03:00 JST
   workflow_dispatch:
 
 jobs:
@@ -10,15 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     name: generate-github-profile-3d-contrib
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - uses: yoshi389111/github-profile-3d-contrib@0.6.0
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
-      - name: Push changes
+
+      - name: Commit & Push if Changes
         run: |
-          git config user.name hdi1021
-          git config user.email "your-email@example.com"
+          git config --global user.name "hdi1021"
+          git config --global user.email "your-email@example.com"
+
           git add .
-          git commit -m "generated"
-          git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/hdi1021/hdi1021.git HEAD:main
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "generated"
+            git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/hdi1021/hdi1021.git HEAD:main
+          fi
