@@ -15,10 +15,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           USERNAME: ${{ github.repository_owner }}
-      - name: Commit & Push
+      - name: Push changes
         run: |
           git config user.name hdi1021
-          git config user.email dain1021@dgsw.hs.kr
-          git add -A .
+          git config user.email "your-email@example.com"
+          git add .
           git commit -m "generated"
-          git push
+          git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/hdi1021/hdi1021.git HEAD:main
